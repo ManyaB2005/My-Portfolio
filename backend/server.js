@@ -28,13 +28,14 @@ mongoose.connect(process.env.MONGO_URI)
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
-  secure: true, // Use SSL
+  secure: true,
+  family: 4, // <--- THIS IS THE FIX: Forces the server to use IPv4
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
-  connectionTimeout: 15000, // Increase wait time to 15 seconds
-  greetingTimeout: 15000
+  connectionTimeout: 10000,
+  greetingTimeout: 10000
 });
 
 // --- ROUTES ---
