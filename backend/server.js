@@ -24,12 +24,17 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => console.log('❌ MongoDB Connection Error: ', err));
 
 // --- EMAIL CONFIGURATION ---
+// --- EMAIL CONFIGURATION ---
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // Use SSL
   auth: {
-    user: process.env.EMAIL_USER, 
-    pass: process.env.EMAIL_PASS 
-  }
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  },
+  connectionTimeout: 15000, // Increase wait time to 15 seconds
+  greetingTimeout: 15000
 });
 
 // --- ROUTES ---
@@ -42,7 +47,6 @@ app.post('/api/contact', async (req, res) => {
     await newMessage.save();
 
     // 2. Send Notification Email
-    // We use the sender's name in the 'from' field and their email in 'replyTo'
     const mailOptions = {
       from: `"${name}" <${process.env.EMAIL_USER}>`, 
       replyTo: email, 
@@ -51,12 +55,14 @@ app.post('/api/contact', async (req, res) => {
       text: `You have a new connection request:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
     };
 
+    // This will now wait longer for the connection
     await transporter.sendMail(mailOptions);
 
     res.status(201).json({ success: true, message: 'Message stored and email sent!' });
   } catch (error) {
     console.error('Email/Database Error:', error);
-    res.status(500).json({ success: false, message: 'Server Error' });
+    // Returning error message to frontend to help debugging
+    res.status(500).json({ success: false, message: error.message });
   }
 });
 
