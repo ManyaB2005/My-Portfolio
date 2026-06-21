@@ -264,8 +264,7 @@ const App = () => {
 
     try {
       // Connect to your local backend API
-      const response = await fetch('http://localhost:5000/api/contact', {
-        method: 'POST',
+      const response = await fetch('https://manya-portfolio.onrender.com/api/contact', {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
