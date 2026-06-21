@@ -257,14 +257,16 @@ const App = () => {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  // ... inside your App component ...
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setStatus({ loading: true, success: false, error: '' });
 
     try {
-      // Connect to your local backend API
+      // Pointing to your live Render backend
       const response = await fetch('https://manya-portfolio.onrender.com/api/contact', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
@@ -273,15 +275,17 @@ const App = () => {
 
       if (response.ok) {
         setStatus({ loading: false, success: true, error: '' });
-        setFormData({ name: '', email: '', message: '' }); // Clear form
+        setFormData({ name: '', email: '', message: '' }); 
         setTimeout(() => setStatus(prev => ({ ...prev, success: false })), 5000);
       } else {
-        setStatus({ loading: false, success: false, error: data.message || 'Something went wrong.' });
+        setStatus({ loading: false, success: false, error: data.message || 'Server rejected request.' });
       }
     } catch (error) {
-      setStatus({ loading: false, success: false, error: 'Failed to connect to the server. Is it running?' });
+      setStatus({ loading: false, success: false, error: 'Cannot reach server. Check Render logs.' });
     }
   };
+
+// ... rest of your file ...
 
   return (
     <>
