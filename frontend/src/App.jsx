@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 // --- BULLETPROOF ICONS ---
 const Icons = {
@@ -115,15 +115,6 @@ const globalStyles = `
   .timeline-item { position: relative; padding-left: 32px; border-left: 2px solid var(--border-light); padding-bottom: 40px; }
   .timeline-item::before { content: ''; position: absolute; left: -6px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-main); }
   .timeline-item:last-child { border-left-color: transparent; padding-bottom: 0; }
-
-  /* FORM STYLES */
-  .contact-form { display: flex; flex-direction: column; gap: 16px; max-width: 500px; margin: 0 auto 2rem auto; text-align: left; }
-  .form-input { width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-light); border-radius: 8px; color: var(--text-primary); font-family: inherit; font-size: 0.95rem; transition: border-color 0.3s; }
-  .form-input:focus { outline: none; border-color: var(--accent-main); }
-  textarea.form-input { min-height: 120px; resize: vertical; }
-  .form-message { text-align: center; font-size: 0.9rem; margin-top: 10px; font-weight: 500; }
-  .msg-success { color: #4ade80; }
-  .msg-error { color: #f87171; }
 `;
 
 // --- DATA CONFIGURATION ---
@@ -161,22 +152,22 @@ const USER = {
       githubUrl: "https://github.com/ManyaB2005/NGO-Educational-Program-and-Team-Database-Management-System.git" 
     },
     { 
-      title: "FCI-Event-Resource-Requirement-Planner", 
+      title: "FCI Event Resource Requirement Planner", 
       desc: "Designed and managed a SQL-based database system for storing and organizing student, volunteer, program, and team information. Implemented database operations, data retrieval, and record management to improve data accessibility and administrative efficiency.", 
       tech: ["HTML", "CSS", "JavaScript", "Node.js", "Express.js", "SQL"],
-      githubUrl: "https://github.com/ManyaB2005/FCI-Event-Resource-Requirement-Planner.git" // Replace with actual URL
+      githubUrl: "https://github.com/ManyaB2005/FCI-Event-Resource-Requirement-Planner.git" 
     },
     { 
       title: "Fake Certificate Detection System using Blockchain", 
       desc: "Developed a decentralized web application to securely issue and verify tamper-proof academic credentials. Engineered a dual-key cryptographic architecture and implemented client-side SHA-256 hashing alongside a Bloom filter to optimize Ethereum gas costs, ensure zero-knowledge data privacy, and anchor immutable records to the blockchain.", 
       tech: ["React.js", "Node.js", "Solidity", "Ethereum(Sepolia Testnet)", "Ethers.js", "MetaMask", "SHA-256 Hashing", "Bloom Filter", "RSA-2048 (Digital Signatures)"],
-      githubUrl: "https://github.com/ManyaB2005/Fake-Certificate-Detection-System" // Replace with actual URL
+      githubUrl: "https://github.com/ManyaB2005/Fake-Certificate-Detection-System" 
     },
     { 
       title: "Smart Queue Management System For Faculty Appointment", 
       desc: "Developed a real-time scheduling platform that eliminates physical wait times by featuring live queue synchronization, dynamic wait-time algorithms, and automated faculty availability lockouts. Engineered role-based dashboards providing instant, bidirectional updates between students and professors.", 
       tech: ["React.js", "Node.js", "MongoDB","Express.js","Socket.io"],
-      githubUrl: "https://github.com/ManyaB2005/Smart-Queue-Management-System-For-Faculty-Appointment.git" // Replace with actual URL
+      githubUrl: "https://github.com/ManyaB2005/Smart-Queue-Management-System-For-Faculty-Appointment.git" 
     }
   ],
 
@@ -259,39 +250,6 @@ const Section = ({ title, id, children }) => (
 );
 
 const App = () => {
-  // --- CONTACT FORM STATE ---
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState({ loading: false, success: false, error: '' });
-
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    setStatus({ loading: true, success: false, error: '' });
-
-    try {
-      // Pointing to your live Render backend
-      const response = await fetch('https://manya-portfolio.onrender.com/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setStatus({ loading: false, success: true, error: '' });
-        setFormData({ name: '', email: '', message: '' }); 
-        setTimeout(() => setStatus(prev => ({ ...prev, success: false })), 5000);
-      } else {
-        setStatus({ loading: false, success: false, error: data.message || 'Server rejected request.' });
-      }
-    } catch (error) {
-      setStatus({ loading: false, success: false, error: 'Cannot reach server. Check Render logs.' });
-    }
-  };
 
   return (
     <>
@@ -317,7 +275,6 @@ const App = () => {
             <div className="hero-content">
               <h1 className="title-hero">{USER.name}</h1>
               <h2 className="hero-subtitle">{USER.role}</h2>
-              {/* Text justified and updated */}
               <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', fontWeight: '400', marginBottom: '2rem', lineHeight: '1.8', maxWidth: '600px', textAlign: 'justify' }}>
                 {USER.about}
               </p>
@@ -347,8 +304,6 @@ const App = () => {
               <div key={i} className="tech-card">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
                   <h3 style={{ fontSize: '1.5rem', fontWeight: '700' }}>{p.title}</h3>
-                  
-                  {/* Updated Link Logic: Uses specific githubUrl if available, else falls back to main profile */}
                   <a href={p.githubUrl ? p.githubUrl : USER.github} target="_blank" rel="noreferrer" style={{ color: 'var(--text-secondary)', cursor: 'pointer', transition: 'color 0.2s' }}>
                     <Icons.ExternalLink />
                   </a> 
@@ -434,49 +389,23 @@ const App = () => {
           </div>
         </Section>
 
-        {/* 8. CONTACT FOOTER WITH FULL STACK FORM */}
+        {/* 8. CONTACT FOOTER - MINIMALIST */}
         <section id="contact" className="section-wrapper animate-in" style={{ borderBottom: 'none', textAlign: 'center', paddingBottom: '80px', paddingTop: '60px' }}>
           <h2 className="title-section" style={{ marginBottom: '1.5rem' }}>Let's Connect</h2>
           <p style={{ color: 'var(--text-secondary)', margin: '0 auto 2.5rem auto', maxWidth: '450px', fontSize: '1.1rem', lineHeight: '1.7' }}>
-            I am currently open to new opportunities. Send me a message and I'll get back to you!
+            I am currently open to new opportunities. Whether you have a question or just want to say hi, my inbox is always open!
           </p>
-          
-          <form className="contact-form" onSubmit={handleFormSubmit}>
-            <input 
-              type="text" 
-              name="name" 
-              placeholder="Your Name" 
-              className="form-input" 
-              value={formData.name}
-              onChange={handleInputChange}
-              required 
-            />
-            <input 
-              type="email" 
-              name="email" 
-              placeholder="Your Email" 
-              className="form-input" 
-              value={formData.email}
-              onChange={handleInputChange}
-              required 
-            />
-            <textarea 
-              name="message" 
-              placeholder="Your Message" 
-              className="form-input" 
-              value={formData.message}
-              onChange={handleInputChange}
-              required 
-            />
-            
-            <button type="submit" className="btn btn-primary" disabled={status.loading} style={{ width: '100%', marginTop: '10px' }}>
-              {status.loading ? 'Sending Transmission...' : <><Icons.Send /> Send Message</>}
-            </button>
+          <div className="btn-group" style={{ justifyContent: 'center', marginTop: '2rem', gap: '20px' }}>
+            {/* Standard mailto: opens the HR recruiter's default mail app (Outlook, etc.) */}
+            <a 
+              href="mailto:manyamannu0@gmail.com?subject=Connecting%20from%20your%20Portfolio" 
+              className="btn btn-primary" 
+              style={{ padding: '14px 32px', fontSize: '1.05rem' }}
+            >
+              <Icons.Send /> Say Hello
+            </a>
+          </div>
 
-            {status.success && <p className="form-message msg-success">Message securely delivered to database!</p>}
-            {status.error && <p className="form-message msg-error">{status.error}</p>}
-          </form>
-          
           <div className="btn-group" style={{ justifyContent: 'center', marginTop: '2rem' }}>
             <a href={USER.github} target="_blank" rel="noreferrer" className="btn btn-outline">
               <Icons.Github /> GitHub
