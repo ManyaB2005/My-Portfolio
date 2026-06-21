@@ -133,19 +133,19 @@ const USER = {
   linkedin: "https://www.linkedin.com/in/manya-507313297", 
   github: "https://github.com/ManyaB2005", 
   photo: "/manya profile.png",
-  about: "I am a final-year Information Science student who loves building full-stack web applications. I specialize in the MERN stack and enjoy turning complex ideas into simple, user-friendly designs. As I prepare to graduate, I am actively looking for opportunities to join a great team and build products that make a real impact.",
-  
+  about: "I am a final-year Information Science and Engineering student and an FCI Scholar. I am passionate about technology, machine learning, and software development. I enjoy learning new skills, building projects, and solving real-world problems while continuously growing both personally and professionally.",
+
   education: [
     { school: "UVCE Bengaluru", degree: "B.Tech in Information Science", year: "2023 - 2027", gpa: "9.51 CGPA" },
     { school: "SVPUC Kundapura", degree: "PCMB", year: "2021 - 2023", gpa: "97%" }
   ],
 
   skills: [
-    { category: "Frontend", items: "HTML, CSS, JavaScript, React, Tailwind" },
+    { category: "Frontend", items: "HTML, CSS, JavaScript, React" },
     { category: "Backend", items: "Node.js, Express.js" },
     { category: "Database", items: "MongoDB, MySQL" },
     { category: "Languages", items: "C, C++, Python" },
-    { category: "Tools", items: "Git, GitHub, Postman" }
+    { category: "Tools", items: "Git, GitHub" }
   ],
 
   projects: [
@@ -157,17 +157,26 @@ const USER = {
     { 
       title: "NGO Educational Program and Team Database Management System", 
       desc: "Designed and managed a SQL-based database system for storing and organizing student, volunteer, program, and team information. Implemented database operations, data retrieval, and record management to improve data accessibility and administrative efficiency.", 
-      tech: ["HTML", "CSS", "JavaScript", "Node.js", "Express.js", "SQL"]
+      tech: ["HTML", "CSS", "JavaScript", "Node.js", "Express.js", "SQL"],
+      githubUrl: "https://github.com/ManyaB2005/NGO-Educational-Program-and-Team-Database-Management-System.git" 
     },
     { 
       title: "FCI-Event-Resource-Requirement-Planner", 
       desc: "Designed and managed a SQL-based database system for storing and organizing student, volunteer, program, and team information. Implemented database operations, data retrieval, and record management to improve data accessibility and administrative efficiency.", 
-      tech: ["HTML", "CSS", "JavaScript", "Node.js", "Express.js", "SQL"]
+      tech: ["HTML", "CSS", "JavaScript", "Node.js", "Express.js", "SQL"],
+      githubUrl: "https://github.com/ManyaB2005/FCI-Event-Resource-Requirement-Planner.git" // Replace with actual URL
     },
     { 
       title: "Fake Certificate Detection System using Blockchain", 
       desc: "Developed a decentralized web application to securely issue and verify tamper-proof academic credentials. Engineered a dual-key cryptographic architecture and implemented client-side SHA-256 hashing alongside a Bloom filter to optimize Ethereum gas costs, ensure zero-knowledge data privacy, and anchor immutable records to the blockchain.", 
-      tech: ["React.js", "Node.js", "Solidity", "Ethereum(Sepolia Testnet)", "Ethers.js", "MetaMask", "SHA-256 Hashing", "Bloom Filter", "RSA-2048 (Digital Signatures)"]
+      tech: ["React.js", "Node.js", "Solidity", "Ethereum(Sepolia Testnet)", "Ethers.js", "MetaMask", "SHA-256 Hashing", "Bloom Filter", "RSA-2048 (Digital Signatures)"],
+      githubUrl: "https://github.com/ManyaB2005/Fake-Certificate-Detection-System" // Replace with actual URL
+    },
+    { 
+      title: "Smart Queue Management System For Faculty Appointment", 
+      desc: "Developed a real-time scheduling platform that eliminates physical wait times by featuring live queue synchronization, dynamic wait-time algorithms, and automated faculty availability lockouts. Engineered role-based dashboards providing instant, bidirectional updates between students and professors.", 
+      tech: ["React.js", "Node.js", "MongoDB","Express.js","Socket.io"],
+      githubUrl: "https://github.com/ManyaB2005/Smart-Queue-Management-System-For-Faculty-Appointment.git" // Replace with actual URL
     }
   ],
 
@@ -257,7 +266,6 @@ const App = () => {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  // ... inside your App component ...
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -284,8 +292,6 @@ const App = () => {
       setStatus({ loading: false, success: false, error: 'Cannot reach server. Check Render logs.' });
     }
   };
-
-// ... rest of your file ...
 
   return (
     <>
@@ -341,7 +347,9 @@ const App = () => {
               <div key={i} className="tech-card">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
                   <h3 style={{ fontSize: '1.5rem', fontWeight: '700' }}>{p.title}</h3>
-                  <a href={USER.github} target="_blank" rel="noreferrer" style={{ color: 'var(--text-secondary)', cursor: 'pointer', transition: 'color 0.2s' }}>
+                  
+                  {/* Updated Link Logic: Uses specific githubUrl if available, else falls back to main profile */}
+                  <a href={p.githubUrl ? p.githubUrl : USER.github} target="_blank" rel="noreferrer" style={{ color: 'var(--text-secondary)', cursor: 'pointer', transition: 'color 0.2s' }}>
                     <Icons.ExternalLink />
                   </a> 
                 </div>
@@ -382,7 +390,7 @@ const App = () => {
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', textAlign: 'justify' }}>{vol.desc}</p>
                 {vol.link && (
                   <a href={vol.link} target="_blank" rel="noreferrer" className="credential-link">
-                    View Credential <Icons.ExternalLink />
+                    View Certificate <Icons.ExternalLink />
                   </a>
                 )}
               </div>
@@ -400,7 +408,7 @@ const App = () => {
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', textAlign: 'justify' }}>{achieve.desc}</p>
                 {achieve.link && (
                   <a href={achieve.link} target="_blank" rel="noreferrer" className="credential-link">
-                    View Credential <Icons.ExternalLink />
+                    View Certificate <Icons.ExternalLink />
                   </a>
                 )}
               </div>
