@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const Message = require('./models/Message'); 
@@ -9,7 +10,6 @@ const Message = require('./models/Message');
 const app = express();
 
 // --- MIDDLEWARE ---
-// Replace the origin below with your ACTUAL live Vercel URL if it ever changes
 app.use(cors({
   origin: 'https://my-portfolio-beige-phi-64.vercel.app',
   methods: ['GET', 'POST'],
@@ -23,18 +23,39 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB Database Connected Successfully'))
   .catch((err) => console.log('❌ MongoDB Connection Error: ', err));
 
-// --- ROUTES ---
-app.get('/api/health', (req, res) => {
-  res.status(200).json({ message: 'System Online' });
+// --- EMAIL CONFIGURATION ---
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER, 
+    pass: process.env.EMAIL_PASS 
+  }
 });
 
+// --- ROUTES ---
 app.post('/api/contact', async (req, res) => {
   try {
     const { name, email, message } = req.body;
+
+    // 1. Save to MongoDB
     const newMessage = new Message({ name, email, message });
     await newMessage.save();
-    res.status(201).json({ success: true, message: 'Message sent successfully!' });
+
+    // 2. Send Notification Email
+    // We use the sender's name in the 'from' field and their email in 'replyTo'
+    const mailOptions = {
+      from: `"${name}" <${process.env.EMAIL_USER}>`, 
+      replyTo: email, 
+      to: process.env.EMAIL_USER,
+      subject: `Connect Request: ${name}`,
+      text: `You have a new connection request:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(201).json({ success: true, message: 'Message stored and email sent!' });
   } catch (error) {
+    console.error('Email/Database Error:', error);
     res.status(500).json({ success: false, message: 'Server Error' });
   }
 });
